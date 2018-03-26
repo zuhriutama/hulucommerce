@@ -47,7 +47,22 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
+                                    <i class="fa fa-shopping-cart"></i> Cart ({{$cart?$cart->cartDetails->count():0}})
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    @if($cart)
+                                    @foreach($cart->cartDetails as $detail)
+                                    <li><a href="{{route('product-detail', ['slug'=>$detail->product->slug])}}">{{$detail->product_name}} <span class="pull-right">{{$detail->qty}}</span></a></li>
+                                    @endforeach
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{route('cart')}}" class="text-center"><strong class="text-info">view cart</strong></a></li>
+                                    <li><a href="" class="text-center"><strong class="text-warning">checkout</strong></a></li>
+                                    @endif
+                                </ul>
+                            </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -78,5 +93,13 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <!-- SweetAlert2 -->
+    <script src="{{asset('bower_components/sweetalert2/sweetalert2.all.js')}}"></script>
+
+    <script type="text/javascript">
+        @if (session()->has('success'))
+            swal('Success!', "{{session()->get('success')}}", 'success')
+        @endif
+    </script>
 </body>
 </html>
