@@ -17,4 +17,9 @@ class AdminController extends BaseController
     {
     	$this->user = \Auth::user();
     }
+
+    public function index()
+    {
+        return view('admin.dashboard');
+    }
 }

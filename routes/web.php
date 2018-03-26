@@ -19,8 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/admin', function () {
-        return view('admin/dashboard');
-    })->name('dashboard');
+Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function () {
+
+    Route::get('/', 'AdminController@index');
+    Route::get('home', 'AdminController@index');
+    Route::resource('products', 'ProductController');
+
 });

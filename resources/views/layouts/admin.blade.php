@@ -34,7 +34,7 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="{{route('dashboard')}}" class="logo">
+    <a href="{{url('admin')}}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>H</b>C</span>
       <!-- logo for regular state and mobile devices -->
@@ -219,7 +219,7 @@
       </h1>
       @show
       <ol class="breadcrumb">
-        <li><a href="{{route('dashboard')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="{{url('admin/home')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
       </ol>
     </section>
 
@@ -244,6 +244,8 @@
 <script src="{{asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('bower_components/fastclick/lib/fastclick.js')}}"></script>
+<!-- SweetAlert2 -->
+<script src="{{asset('bower_components/sweetalert2/sweetalert2.all.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/js/adminlte.min.js')}}"></script>
 <script type="text/javascript">
@@ -251,5 +253,6 @@
     $('form[name=logout]').submit()
   }
 </script>
+@yield('script')
 </body>
 </html>
