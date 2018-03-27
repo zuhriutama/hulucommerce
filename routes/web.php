@@ -22,11 +22,19 @@ Route::middleware('auth')->group(function () {
 	Route::get('cart/add/{slug}', 'CartController@addProduct')->name('add-to-cart');
 	Route::get('cart/remove/{id}', 'CartController@removeProduct')->name('remove-from-cart');
 	Route::get('cart', 'CartController@index')->name('cart');
+    Route::get('checkout', 'CheckoutController@index')->name('checkout');
 });
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function () {
     Route::get('/', 'AdminController@index');
     Route::get('home', 'AdminController@index')->name('dashboard');
     Route::resource('products', 'ProductController');
+    Route::resource('users', 'UserController');
+    Route::resource('user-addresses', 'UserAddressController');
+    Route::resource('payment-methods', 'PaymentMethodController');
+    Route::resource('shipping-methods', 'ShippingMethodController');
+    Route::resource('provinces', 'ProvinceController');
+    Route::resource('cities', 'CityController');
+    Route::resource('orders', 'OrderController');
 
 });

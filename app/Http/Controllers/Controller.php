@@ -26,10 +26,11 @@ class Controller extends BaseController
 
             if (\Auth::check()) {
                 $this->cart = Cart::where('user_id', \Auth::user()->id)
-                    ->where('status', 'draft')
+                    ->where('status', '<>', 'thankyou')
+                    ->latest()
                     ->first();
             } else {
-                $this->cart = [];
+                $this->cart = null;
             }
 
             view()->share('cart', $this->cart);

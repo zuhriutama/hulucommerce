@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cart extends Model
+class UserAddress extends Model
 {
     use SoftDeletes;
-
-    const STATUS_THANKYOU = 'thankyou';
-    const STATUS_DRAFT = 'draft';
-    const STATUS_CHECKOUT = 'checkout';
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +16,12 @@ class Cart extends Model
      */
     protected $fillable = [
         'user_id',
-        'status',
+        'name',
+        'province_id',
+        'city_id',
+        'address',
+        'phone',
+        'zipcode',
     ];
 
     /**
@@ -37,23 +38,14 @@ class Cart extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function cartDetails()
+    public function province()
     {
-        return $this->hasMany('App\Models\CartDetail');
+        return $this->belongsTo('App\Models\Province');
     }
 
-    public function total()
+    public function city()
     {
-        $total = 0;
-        foreach($this->cartDetails as $detail){
-            $total += $detail->subtotal();
-        }
-        return $total;
-    }
-
-    public function checkout()
-    {
-        $this->update(['status'=>self::STATUS_CHECKOUT]);
+        return $this->belongsTo('App\Models\City');
     }
     
 }

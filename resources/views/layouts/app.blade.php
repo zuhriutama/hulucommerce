@@ -59,7 +59,7 @@
                                     @endforeach
                                     <li role="separator" class="divider"></li>
                                     <li><a href="{{route('cart')}}" class="text-center"><strong class="text-info">view cart</strong></a></li>
-                                    <li><a href="" class="text-center"><strong class="text-warning">checkout</strong></a></li>
+                                    <li><a href="{{route('checkout')}}" class="text-center"><strong class="text-warning">checkout</strong></a></li>
                                     @endif
                                 </ul>
                             </li>
