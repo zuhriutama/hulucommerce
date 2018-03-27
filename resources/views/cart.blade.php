@@ -15,7 +15,7 @@
                       	</a>
                       </div>
                       <div class="media-body">
-                      	<h4 class="media-heading">{{$detail->product_name}}</h4>
+                      	<h4 class="media-heading">{{$detail->product_name}} <a href="{{route('remove-from-cart',['id'=>$detail->id])}}"><i class="fa fa-times"></i></a></h4>
                         {{$detail->qty}} @ Rp. {{number_format($detail->product_price,2,',','.')}}
                         <span class="pull-right">Rp. {{number_format($detail->subtotal(),2,',','.')}}</span>
                       </div>

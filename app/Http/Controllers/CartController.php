@@ -37,4 +37,13 @@ class CartController extends Controller
 
         return back()->with('success','Added to Cart!');
     }
+
+    public function removeProduct($id)
+    {
+        $item = CartDetail::find($id);
+        if($item)
+            $item->delete();
+
+        return back()->with('success','Removed from Cart!');
+    }
 }
