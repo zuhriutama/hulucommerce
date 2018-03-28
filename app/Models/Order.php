@@ -85,7 +85,7 @@ class Order extends Model
     public static function generateSerial()
     {
         $lastOrder = Order::latest()->first();
-        return 'ORD'.str_pad($lastOrder ? $lastOrder->id + 1 : 1, 4, '0', STR_PAD_LEFT).'/'.Carbon::now()->format('d/m/Y');
+        return 'ORD'.Carbon::now()->format('dmY').str_pad($lastOrder ? $lastOrder->id + 1 : 1, 4, '0', STR_PAD_LEFT);
     }
 
     public static function createFromCart($cart)

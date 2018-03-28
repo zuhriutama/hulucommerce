@@ -47,5 +47,18 @@ class UserAddress extends Model
     {
         return $this->belongsTo('App\Models\City');
     }
+
+    public function fullAddress()
+    {
+        $address = $this->address.'<br>';
+        if($this->province)
+            $address .= $this->province->name.', ';
+        if($this->city)
+            $address .= $this->city->name.', ';
+        if($this->zipcode)
+            $address .= $this->zipcode;
+
+        return $address;
+    }
     
 }

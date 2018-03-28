@@ -23,7 +23,7 @@
                     @endforeach
                 </div>
                 <div class="panel-footer">
-                	<a class="btn btn-warning" href="{{route('checkout')}}">Checkout</button>
+                	<a class="btn btn-warning" href="{{route('checkout')}}">Checkout</a>
                 	<strong class="pull-right">Rp. {{number_format($cart->total(),2,',','.')}}</strong>
                 </div>
             </div>

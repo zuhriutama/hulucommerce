@@ -4,27 +4,32 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+          <form method="post" action="{{route('checkout-shipping')}}">
+            {{csrf_field()}}
             <div class="panel panel-default">
-                <div class="panel-heading"><i class="fa fa-shopping-cart"></i> Shopping Cart</div>
+                <div class="panel-heading">
+                  <i class="fa fa-shopping-cart"></i> Shopping Cart
+                  <a href="#" class="pull-right" data-toggle="modal" data-target="#newAddress">add new address</a>
+                </div>
                 <div class="panel-body">
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                       <h4>Payment Address</h4>
                       @if($order->paymentAddress)
-                      <p>{{$order->paymentAddress->name}}</p>
-                      @else
-                      <p><a href="#" data-toggle="modal" data-target="#addressModal">select payment address</a></p>
+                        <p>{{$order->paymentAddress->name}} ({{$order->paymentAddress->phone}})</p>
+                        <p>{{$order->paymentAddress->address}}</p>
                       @endif
+                      <p><a href="#" data-toggle="modal" data-target="#paymentAddressModal">{{$order->paymentAddress?'change':'select'}} payment address</a></p>
                       <hr>
                       <h4>Billing Address</h4>
                       @if($order->shippingAddress)
-                      <p>{{$order->shippingAddress->name}}</p>
-                      @else
-                      <p><a href="#" data-toggle="modal" data-target="#addressModal">select shipping address</a> or <a href="#">same as payment address</a></p>
+                        <p>{{$order->shippingAddress->name}} ({{$order->shippingAddress->phone}})</p>
+                        <p>{{$order->shippingAddress->address}}</p>
                       @endif
+                      <p><a href="#" data-toggle="modal" data-target="#shippingAddressModal">{{$order->shippingAddress?'change':'select'}} shipping address</a></p>
                       <hr>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <h4>Order List</h4>
                       @foreach($order->orderDetails as $detail)
                       <div class="media">
@@ -34,9 +39,9 @@
                         	</a>
                         </div>
                         <div class="media-body">
-                        	<h4 class="media-heading">{{$detail->product_name}}</h4>
+                        	<strong>{{$detail->product_name}}</strong><br>
                           {{$detail->qty}}
-                          <span class="pull-right">Rp. {{number_format($detail->product_price,2,',','.')}}</span>
+                          <span class="pull-right">@ Rp. {{number_format($detail->product_price,2,',','.')}}</span>
                         </div>
                       </div>
                       @endforeach
@@ -44,15 +49,16 @@
                   </div>
                 </div>
                 <div class="panel-footer">
-                	<button class="btn btn-warning">Proceed to Shipping</button>
+                	<button type="submit" class="btn btn-warning">Proceed to Shipping</button>
                 	<strong class="pull-right">Rp. {{number_format($order->grand_total(),2,',','.')}}</strong>
                 </div>
             </div>
+          </form>
         </div>
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="paymentAddressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -61,7 +67,30 @@
       </div>
       <div class="modal-body">
         @foreach(Auth::user()->userAddresses as $address)
-
+        <p><a href="#" class="address" data-id="{{$address->id}}" data-type="payment">{{$address->name}}</a> ({{$address->phone}})</p>
+        <p>{{$address->address}}</p>
+        <hr>
+        @endforeach
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newAddress" data-dismiss="modal">New Address</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="shippingAddressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Address List</h4>
+      </div>
+      <div class="modal-body">
+        @foreach(Auth::user()->userAddresses as $address)
+        <p><a href="#" class="address" data-id="{{$address->id}}" data-type="shipping">{{$address->name}}</a> ({{$address->phone}})</p>
+        <p>{{$address->address}}</p>
+        <hr>
         @endforeach
       </div>
       <div class="modal-footer">
@@ -136,6 +165,24 @@
         })
     }).fail(function(xhr, status, error) {
         swal('Error!', 'Data not found!', 'error')
+    })
+  })
+
+  $('.address').click(function(e){
+    e.preventDefault()
+
+    ctrl = $(this);
+
+    let data = {
+      _token: '{{csrf_token()}}',
+      order_id : {{$order->id}},
+      type: ctrl.data('type'),
+      address_id: ctrl.data('id'),
+    }
+    $.post("{{route('set-address-for-order')}}", data, function(res) {
+        location.reload()
+    }).fail(function(xhr, status, error) {
+        swal('Error!', 'Failed set address!', 'error')
     })
   })
 </script>

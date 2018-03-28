@@ -23,6 +23,7 @@ class AddressController extends Controller
     public function add(Request $request)
     {
         $data = $request->except('_token','_method');
+        $data['user_id'] = \Auth::user()->id;
         $address = UserAddress::create($data);
 
         return back()->with('payment_address_id',$address->id);

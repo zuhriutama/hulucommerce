@@ -13,10 +13,12 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
 Route::get('products', 'ProductController@index')->name('product-list');
 Route::get('product/{slug}', 'ProductController@detail')->name('product-detail');
 Route::get('city', 'AddressController@getCity')->name('get-city-of-province');
+Route::get('thankyou', 'CheckoutController@thankyou')->name('thankyou');
 
 // for user only
 Route::middleware('auth')->group(function () {
@@ -24,7 +26,11 @@ Route::middleware('auth')->group(function () {
 	Route::get('cart/remove/{id}', 'CartController@removeProduct')->name('remove-from-cart');
 	Route::get('cart', 'CartController@index')->name('cart');
     Route::get('checkout', 'CheckoutController@index')->name('checkout');
+    Route::post('checkout/shipping', 'CheckoutController@shipping')->name('checkout-shipping');
+    Route::post('checkout/payment', 'CheckoutController@payment')->name('checkout-payment');
+    Route::post('checkout/finish', 'CheckoutController@finish')->name('checkout-finish');
     Route::post('add-address', 'AddressController@add')->name('add-address');
+    Route::post('set-address', 'CheckoutController@setAddress')->name('set-address-for-order');
 });
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function () {
