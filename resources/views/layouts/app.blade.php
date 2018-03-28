@@ -60,6 +60,8 @@
                                     <li role="separator" class="divider"></li>
                                     <li><a href="{{route('cart')}}" class="text-center"><strong class="text-info">view cart</strong></a></li>
                                     <li><a href="{{route('checkout')}}" class="text-center"><strong class="text-warning">checkout</strong></a></li>
+                                    @else
+                                    <li><a href="javascript:void(0)">Empty Cart</a></li>
                                     @endif
                                 </ul>
                             </li>
@@ -69,11 +71,8 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ route('dashboard') }}">
-                                            Dashboard
-                                        </a>
-                                    </li>
+                                    <li><a href="{{ route('profile') }}">Profile</a></li>
+                                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

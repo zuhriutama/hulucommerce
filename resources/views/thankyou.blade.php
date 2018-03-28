@@ -14,7 +14,7 @@
                 	@if($order->user)
                     <address>
 					  <strong>{{$order->user->name}}</strong><br>
-					  <abbr title="Phone">Phone:</abbr> {{$order->user->phone}}
+					  <abbr title="Email">Email:</abbr> {{$order->user->email}}
 					</address>
 					@endif
                 	<div class="row">

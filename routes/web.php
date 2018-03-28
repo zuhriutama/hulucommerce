@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::post('checkout/finish', 'CheckoutController@finish')->name('checkout-finish');
     Route::post('add-address', 'AddressController@add')->name('add-address');
     Route::post('set-address', 'CheckoutController@setAddress')->name('set-address-for-order');
+    Route::get('user/profile', 'UserController@profile')->name('profile');
+    Route::post('user/profile', 'UserController@update')->name('update-profile');
 });
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function () {
