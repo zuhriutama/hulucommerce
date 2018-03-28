@@ -106,5 +106,6 @@
             swal('Success!', "{{session()->get('success')}}", 'success')
         @endif
     </script>
+    @yield('script')
 </body>
 </html>

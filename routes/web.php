@@ -16,6 +16,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('products', 'ProductController@index')->name('product-list');
 Route::get('product/{slug}', 'ProductController@detail')->name('product-detail');
+Route::get('city', 'AddressController@getCity')->name('get-city-of-province');
 
 // for user only
 Route::middleware('auth')->group(function () {
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
 	Route::get('cart/remove/{id}', 'CartController@removeProduct')->name('remove-from-cart');
 	Route::get('cart', 'CartController@index')->name('cart');
     Route::get('checkout', 'CheckoutController@index')->name('checkout');
+    Route::post('add-address', 'AddressController@add')->name('add-address');
 });
 
 Route::prefix('admin')->namespace('Admin')->middleware('auth')->group(function () {

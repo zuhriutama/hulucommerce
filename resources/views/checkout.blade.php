@@ -72,7 +72,8 @@
   </div>
 </div>
 <div class="modal fade" id="newAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <form>
+  <form method="post" action="{{route('add-address')}}">
+    {{csrf_field()}}
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -120,4 +121,22 @@
   </div>
         </form>
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+  $('select[name=province_id]').change(function(e){
+    let data = {
+      province_id : $(this).val(),
+    }
+    $.get("{{route('get-city-of-province')}}", data, function(res) {
+        $('select[name=city_id]').html('')
+        res.forEach(function (city){
+            $('select[name="city_id"]').append('<option value="'+city.id+'">'+city.name+'</option>')
+        })
+    }).fail(function(xhr, status, error) {
+        swal('Error!', 'Data not found!', 'error')
+    })
+  })
+</script>
 @endsection
