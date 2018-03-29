@@ -79,6 +79,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label>Product Images</label>
+                            <input id="file" type="file" class="form-control" id="images" name="images[]" multiple>
+                        </div>
+
+                        <div class="row images">
+                            @if(isset($item))
+                            @foreach($item->images as $image)
+                                <div class="col-md-2"><img src="{{asset($image->url)}}" class="img-responsive"></div>
+                            @endforeach
+                            @endif
+                        </div>
+
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
@@ -98,7 +111,33 @@
     <script>
         $(function () {
             CKEDITOR.replace('short_desc')
-            CKEDITOR.replace('description')
+            CKEDITOR.replace('description')            
+
+            $('.product-img').click(function(){
+                $('#file').trigger('click')
+            })
+
+            $('#file').change(function(e){
+                var files = event.target.files; //FileList object
+                var output = $('.images');
+                for(var i = 0; i< files.length; i++)
+                {
+                    var file = files[i];
+                    //Only pics
+                    if(!file.type.match('image'))
+                        continue;
+                    var picReader = new FileReader();
+                    picReader.addEventListener("load",function(event){
+                        var picFile = event.target;
+                        var container = '<div class="col-md-2">'+
+                                '<img class="product-img img-responsive" src="'+picFile.result+'" />'+
+                            '</div>';
+                        output.append(container);
+                    });
+                    //Read the image
+                    picReader.readAsDataURL(file);
+                }
+            })
         })
     </script>
 @endsection

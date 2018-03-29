@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\AdminController;
 use App\Models\Product;
+use App\Models\Image;
 
 class ProductController extends AdminController
 {
@@ -42,9 +43,23 @@ class ProductController extends AdminController
             'name' => 'required',
         ]);
 
-        $data = $request->all();
+        $data = $request->except('token','_method');
         $data['slug'] = str_slug($data['name']);
         $item = Product::create($data);
+
+        if ($request->images) {
+            $imgs = array();
+            foreach ($data['images'] as $img) {
+                $photoName = time().'.'.$img->getClientOriginalExtension();
+                $img->move(public_path('uploads/products'), $photoName);
+
+                $imgs[] = Image::create([
+                    'url' => 'uploads/products/'.$photoName
+                ])->id;
+            }
+
+            $item->images()->sync($imgs);
+        }
 
         return redirect('admin/products')->with('status', 'Success add product!');
     }
@@ -89,7 +104,21 @@ class ProductController extends AdminController
         $data = $request->all();
         $data['slug'] = str_slug($data['name']);
 
-        $item->update($data);
+        $item->update($data);        
+
+        if ($request->images) {
+            $imgs = array();
+            foreach ($request->images as $img) {
+                $photoName = time().'.'.$img->getClientOriginalExtension();
+                $img->move(public_path('uploads/products'), $photoName);
+
+                $imgs[] = Image::create([
+                    'url' => 'uploads/products/'.$photoName
+                ])->id;
+            }
+
+            $item->images()->sync($imgs);
+        }
         return redirect('admin/products')->with('status', 'Success update product!');
     }
 
