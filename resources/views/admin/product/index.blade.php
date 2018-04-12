@@ -34,7 +34,7 @@
                             @foreach ($items as $item)
                             <tr>
                                 <td>{{ date('j M Y H:i', strtotime($item->created_at)) }}</td>
-                                <td>{{ $item->name }}</td>
+                                <td><a href="{{route('product-detail', ['slug'=>$item->slug])}}" target="_blank">{{ $item->name }}</a></td>
                                 <td>{{ $item->price }}</td>
                                 <td>{{ $item->sold }}</td>
                                 <td>

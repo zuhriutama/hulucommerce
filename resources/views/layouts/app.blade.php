@@ -53,7 +53,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    @if($cart)
+                                    @if($cart->cartDetails->count()>0)
                                     @foreach($cart->cartDetails as $detail)
                                     <li><a href="{{route('product-detail', ['slug'=>$detail->product->slug])}}">{{$detail->product_name}} <span class="pull-right">{{$detail->qty}}</span></a></li>
                                     @endforeach

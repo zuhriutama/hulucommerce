@@ -16,20 +16,23 @@ class CheckoutController extends Controller
     public function index()
     {
         $order = null;
-        if($this->cart->status=='draft'){
-            $order = Order::createFromCart($this->cart);
-            $this->cart->checkout();
-        }else{
-            $order = Order::where('cart_id',$this->cart->id)->first();
-        }
+        $order = Order::createFromCart($this->cart);
+        $order = Order::find($order->id);
 
         $provinces = Province::all();
 
-        return view('checkout', compact('order', 'provinces'));
+        $step = 'shipping';
+
+        return view('checkout-address', compact('order', 'provinces', 'step'));
     }
 
-    public function shipping()
+    public function shipping(Request $request)
     {
+        $this->validate($request, [
+            'payment_address' => 'required',
+            'shipping_address' => 'required',
+        ]);
+
         $order = Order::where('user_id',\Auth::user()->id)
         ->where('payment_status','unpaid')
         ->latest()
@@ -37,7 +40,9 @@ class CheckoutController extends Controller
 
         $shippingMethods = ShippingMethod::all();
 
-        return view('checkout-shipping', compact('order', 'shippingMethods'));
+        $step = 'payment';
+
+        return view('checkout-shipping', compact('order', 'shippingMethods', 'step'));
     }
 
     public function payment(Request $request)
@@ -56,7 +61,9 @@ class CheckoutController extends Controller
 
         $paymentMethods = PaymentMethod::all();
 
-        return view('checkout-payment', compact('order', 'paymentMethods'));
+        $step = 'finish';
+
+        return view('checkout-payment', compact('order', 'paymentMethods', 'step'));
     }
 
     public function finish(Request $request)

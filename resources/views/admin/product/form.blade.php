@@ -87,7 +87,10 @@
                         <div class="row images">
                             @if(isset($item))
                             @foreach($item->images as $image)
-                                <div class="col-md-2"><img src="{{asset($image->url)}}" class="img-responsive"></div>
+                                <div class="col-md-2">
+                                    <img src="{{asset($image->url)}}" class="img-responsive">
+                                    <a href="#" class="remove-image" data-id="{{$image->id}}">remove</a>
+                                </div>
                             @endforeach
                             @endif
                         </div>
@@ -138,6 +141,22 @@
                     picReader.readAsDataURL(file);
                 }
             })
+
+            @if(isset($item))
+            $('.remove-image').click(function(e){
+                e.preventDefault()
+                let data = {
+                    _token : "{{csrf_token()}}",
+                    image_id : $(this).data('id'),
+                }
+
+                $.post("{{route('remove-image-product', ['id'=>$item->id])}}", data, function(res){
+                    location.reload()
+                }).fail(function(xhr, status, error) {
+                    swal('Error!', 'Failed remove image!', 'error')
+                })
+            })
+            @endif
         })
     </script>
 @endsection

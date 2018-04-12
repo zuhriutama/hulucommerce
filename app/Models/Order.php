@@ -82,6 +82,12 @@ class Order extends Model
         return $total;
     }
 
+    public function deleteDetails()
+    {
+        foreach($this->orderDetails as $detail)
+            $detail->delete();
+    }
+
     public static function generateSerial()
     {
         $lastOrder = Order::latest()->first();
@@ -91,10 +97,12 @@ class Order extends Model
     public static function createFromCart($cart)
     {
         $order = Order::firstOrCreate([
-            'serial'=>self::generateSerial(),
+            'serial'=>Carbon::now()->format('dmY').$cart->id,
             'cart_id'=>$cart->id,
             'user_id'=>$cart->user_id,
         ]);
+
+        $order->deleteDetails();
 
         foreach($cart->cartDetails as $detail){
             $orderDetail = OrderDetail::firstOrCreate([

@@ -19,14 +19,9 @@ class CartController extends Controller
     {
         $product = Product::where('slug',$slug)->first();
 
-        $cart = Cart::firstOrCreate([
-            'user_id'=>\Auth::user()->id,
-            'status'=>'draft',
-        ]);
-
         $cartDetail = CartDetail::firstOrCreate([
             'product_id'=>$product->id,
-            'cart_id'=>$cart->id,
+            'cart_id'=>$this->cart->id,
         ]);
 
         $cartDetail->product_name = $product->name;
@@ -45,5 +40,24 @@ class CartController extends Controller
             $item->delete();
 
         return back()->with('success','Removed from Cart!');
+    }
+
+
+    public function buyProduct($slug)
+    {
+        $product = Product::where('slug',$slug)->first();
+
+        $cartDetail = CartDetail::firstOrCreate([
+            'product_id'=>$product->id,
+            'cart_id'=>$this->cart->id,
+        ]);
+
+        $cartDetail->product_name = $product->name;
+        $cartDetail->product_price = $product->price;
+        $cartDetail->product_weight = $product->weight;
+        $cartDetail->qty++;
+        $cartDetail->save();
+
+        return redirect('checkout');
     }
 }

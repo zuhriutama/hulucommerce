@@ -8,13 +8,13 @@
                 <div class="panel-heading"><i class="fa fa-shopping-cart"></i> Shopping Cart</div>
                 <div class="panel-body">
                     @foreach($cart->cartDetails as $detail)
-                    <div class="media">
-                      <div class="media-left">
+                    <div class="row">
+                      <div class="col-md-3">
                         <a href="{{route('product-detail', ['slug'=>$detail->product->slug])}}">
-                          <img class="media-object" src="{{$detail->product->thumbnail()}}" alt="{{$detail->product_name}}">
+                          <img class="img-responsive" src="{{$detail->product->thumbnail()}}" alt="{{$detail->product_name}}">
                       	</a>
                       </div>
-                      <div class="media-body">
+                      <div class="col-md-9">
                       	<h4 class="media-heading">{{$detail->product_name}} <a href="{{route('remove-from-cart',['id'=>$detail->id])}}"><i class="fa fa-times"></i></a></h4>
                         {{$detail->qty}} @ Rp. {{number_format($detail->product_price,2,',','.')}}
                         <span class="pull-right">Rp. {{number_format($detail->subtotal(),2,',','.')}}</span>

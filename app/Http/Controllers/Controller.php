@@ -26,9 +26,15 @@ class Controller extends BaseController
 
             if (\Auth::check()) {
                 $this->cart = Cart::where('user_id', \Auth::user()->id)
-                    ->where('status', '<>', 'thankyou')
                     ->latest()
                     ->first();
+
+                if(!$this->cart || $this->cart->status=='thankyou'){
+                    $this->cart = Cart::create([
+                        'user_id'=>\Auth::user()->id,
+                        'status'=>'draft',
+                    ]);
+                }
             } else {
                 $this->cart = null;
             }

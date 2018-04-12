@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Routing\Controller;
 use App\Models\Order;
 use App\Models\OrderDetail;
 
-class OrderController extends AdminController
+class OrderController extends Controller
 {
-
-    private $name = 'Order';
-    private $view = 'admin.order';
-    private $link = 'admin/orders';
 
     /**
      * Display a listing of the resource.
@@ -21,8 +17,7 @@ class OrderController extends AdminController
      */
     public function index()
     {
-        $items = Order::all();
-        return view($this->view.'.index', compact('items'));
+        //
     }
 
     /**
@@ -65,8 +60,7 @@ class OrderController extends AdminController
      */
     public function edit($id)
     {
-        $item = Order::find($id);
-        return view($this->view.'.form', compact('item'));
+        //
     }
 
     /**
@@ -80,14 +74,10 @@ class OrderController extends AdminController
     {
         $data = $request->except('_token','_method');
 
-        $this->validate($request, [
-            'serial' => 'required',
-        ]);
-
         $item = Order::find($id);
         $item->update($data);
 
-        return redirect($this->link)->with('status', "Success update $this->name!");
+        return response()->json('Updated');
     }
 
     /**

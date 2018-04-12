@@ -1,62 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.checkout')
 
-@section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-          <form method="post" action="{{route('checkout-shipping')}}">
-            {{csrf_field()}}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                  <i class="fa fa-shopping-cart"></i> Shopping Cart
-                  <a href="#" class="pull-right" data-toggle="modal" data-target="#newAddress">add new address</a>
-                </div>
-                <div class="panel-body">
-                  <div class="row">
-                    <div class="col-md-7">
-                      <h4>Payment Address</h4>
-                      @if($order->paymentAddress)
-                        <p>{{$order->paymentAddress->name}} ({{$order->paymentAddress->phone}})</p>
-                        <p>{{$order->paymentAddress->address}}</p>
-                      @endif
-                      <p><a href="#" data-toggle="modal" data-target="#paymentAddressModal">{{$order->paymentAddress?'change':'select'}} payment address</a></p>
-                      <hr>
-                      <h4>Billing Address</h4>
-                      @if($order->shippingAddress)
-                        <p>{{$order->shippingAddress->name}} ({{$order->shippingAddress->phone}})</p>
-                        <p>{{$order->shippingAddress->address}}</p>
-                      @endif
-                      <p><a href="#" data-toggle="modal" data-target="#shippingAddressModal">{{$order->shippingAddress?'change':'select'}} shipping address</a></p>
-                      <hr>
-                    </div>
-                    <div class="col-md-5">
-                      <h4>Order List</h4>
-                      @foreach($order->orderDetails as $detail)
-                      <div class="media">
-                        <div class="media-left">
-                          <a href="{{route('product-detail', ['slug'=>$detail->product->slug])}}">
-                            <img class="media-object" src="{{$detail->product->thumbnail()}}" alt="{{$detail->product_name}}">
-                        	</a>
-                        </div>
-                        <div class="media-body">
-                        	<strong>{{$detail->product_name}}</strong><br>
-                          {{$detail->qty}}
-                          <span class="pull-right">@ Rp. {{number_format($detail->product_price,2,',','.')}}</span>
-                        </div>
-                      </div>
-                      @endforeach
-                    </div>
-                  </div>
-                </div>
-                <div class="panel-footer">
-                	<button type="submit" class="btn btn-warning">Proceed to Shipping</button>
-                	<strong class="pull-right">Rp. {{number_format($order->grand_total(),2,',','.')}}</strong>
-                </div>
-            </div>
-          </form>
-        </div>
-    </div>
-</div>
+@section('checkout')
+<h4>Payment Address</h4>
+<input type="hidden" name="payment_address" value="{{$order->payment_address_id}}">
+@if($order->paymentAddress)
+  <p>{{$order->paymentAddress->name}} ({{$order->paymentAddress->phone}})</p>
+  <p>{{$order->paymentAddress->address}}</p>
+@endif
+<p><a href="#" data-toggle="modal" data-target="#paymentAddressModal">{{$order->paymentAddress?'change':'select'}} payment address</a></p>
+<hr>
+<h4>Shipping Address</h4>
+<input type="hidden" name="shipping_address" value="{{$order->shipping_address_id}}">
+@if($order->shippingAddress)
+  <p>{{$order->shippingAddress->name}} ({{$order->shippingAddress->phone}})</p>
+  <p>{{$order->shippingAddress->address}}</p>
+@endif
+<p><a href="#" data-toggle="modal" data-target="#shippingAddressModal">{{$order->shippingAddress?'change':'select'}} shipping address</a></p>
+@endsection
+
+@section('modal')
 <!-- Modal -->
 <div class="modal fade" id="paymentAddressModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">

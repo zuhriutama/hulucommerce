@@ -58,7 +58,7 @@ class ProductController extends AdminController
                 ])->id;
             }
 
-            $item->images()->sync($imgs);
+            $item->images()->attach($imgs);
         }
 
         return redirect('admin/products')->with('status', 'Success add product!');
@@ -117,7 +117,7 @@ class ProductController extends AdminController
                 ])->id;
             }
 
-            $item->images()->sync($imgs);
+            $item->images()->attach($imgs);
         }
         return redirect('admin/products')->with('status', 'Success update product!');
     }
@@ -132,5 +132,13 @@ class ProductController extends AdminController
     {
         Product::find($id)->delete();
         return redirect('admin/products')->with('status', 'Success delete product!');
+    }
+
+    public function removeImage(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $product->images()->detach([$request->image_id]);
+
+        return 'Image removed';
     }
 }

@@ -1,3 +1,4 @@
+<li><a href="{{url('admin')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
 <li><a href="{{url('admin/provinces')}}"><i class="fa fa-university"></i> <span>Provinces</span></a></li>
 <li><a href="{{url('admin/cities')}}"><i class="fa fa-industry"></i> <span>Cities</span></a></li>
 <li><a href="{{url('admin/payment-methods')}}"><i class="fa fa-money"></i> <span>Payment Methods</span></a></li>
